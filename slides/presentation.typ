@@ -11,24 +11,21 @@
 
   #title-slide(
     title: [
-      Wenn Gurken-Code plötzlich Spaß macht!
+      Fehler früh finden
+    ],
+    subtitle: [
+      Von Unit-Tests zu BDD mit Gurken
     ],
     authors: [
-      Christian Budde #link("https://github.com/cwbudde")[#fa-github() cwbudde] \
-      Lukas Nagel #link("https://github.com/cwbudde")[#fa-github() lukasngl] \
+      Christian Budde #link("https://github.com/MeKo-Christian")[#fa-github() MeKo-Christian] \
     ],
     extra: [
-      Hannover Gophers, 14.10.2025
+      Informatik für Ingenieure · Software-Testen
     ],
-    url: "https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation",
-    title-image: image(
-      "../assets/pickle-gophers_building_the_hannover_rathaus.png",
-      alt: "Pickle-Gophers building the Hannover Rathaus",
-      height: 100%,
-    ),
   )
 
-  #section-slide([Die Realität])[ ]
+  // ===========================================================================
+  #section-slide([Warum überhaupt testen?])[ ]
 
   #content-slide([Wer kennt das nicht?])[
     #set align(horizon + center)
@@ -96,7 +93,138 @@
     ]
   ]
 
-  #content-slide([Die Folgen])[
+  #content-slide([Was, wenn's schiefgeht?])[
+    - Ein Softwarefehler in Medizinprodukten kann Leben gefährden
+    - Regulatorische Anforderungen (MDR, FDA)
+      - Softwarevalidierung verpflichtend
+    - Fehler im Feld kosten Geld, Zeit und Vertrauen
+
+    #v(1em)
+    #align(center)[
+      #text(size: 0.9em, style: "italic")[
+        Tests verhindern nicht nur Produktionsausfälle, \
+        sondern schützen am Ende auch Menschenleben.
+      ]
+    ]
+  ]
+
+  #content-slide([Fehler früh finden lohnt sich])[
+    #set align(horizon + center)
+
+    #text(size: 0.95em)[
+      Bei Palm führten sie 2006 eine Studie durch, die zeigte: \
+      Wird ein Bug erst 3 Wochen später behoben, kostet die Behebung \
+      desselben Bugs das *24-fache* an Aufwand.
+      #text(size: 0.8em, style: "italic")[(Quelle: Jeff Sutherland)]
+    ]
+
+    #image("../assets/DownShift.gif", width: 70%)
+
+    #place(
+      bottom + right,
+      dy: -1em,
+      text(size: 10pt, style: "italic")[
+        Bildquelle:
+        #link(
+          "https://www.linkedin.com/posts/davidavpereira_fixing-production-bugs-is-640x-more-expensive-activity-7286021036976857089-UHmI/",
+        )[David Pereira]
+      ],
+    )
+  ]
+
+  // ===========================================================================
+  #section-slide([Welche Optionen haben wir?])[ ]
+
+  #content-slide([Manuell oder automatisiert?])[
+    #toolbox.side-by-side(
+      columns: (1fr, 1fr),
+      [
+        *Manuelles Testen* 🖱️
+        - Mensch klickt sich durch
+        - Flexibel, gut für Exploration
+        - Langsam, nicht wiederholbar
+        - Wird bei jeder Änderung erneut nötig
+      ],
+      [
+        *Automatisierte Tests* 🤖
+        - Code prüft Code
+        - Schnelles Feedback, jederzeit
+        - Schützt vor Regressionen
+        - Einmal schreiben, beliebig oft ausführen
+      ],
+    )
+
+    #v(1em)
+    #align(center)[
+      #text(size: 0.9em, style: "italic")[
+        Je früher und automatischer wir testen, desto früher fallen Fehler auf.
+      ]
+    ]
+  ]
+
+  #content-slide([Die Test-Pyramide])[
+    #toolbox.side-by-side(
+      columns: (1fr, 1fr),
+      align(horizon)[
+        *Drei Ebenen:*
+        - *Unit-Tests* \ einzelne Funktionen/Klassen, viele, schnell
+        - *Integrationstests* \ Zusammenspiel mehrerer Teile
+        - *End-to-End* \ ganzes System, wenige, langsam
+
+        #v(0.5em)
+        #text(size: 0.85em, style: "italic")[
+          Viel Fundament unten, wenig Spitze oben.
+        ]
+      ],
+      align(horizon + center)[
+        #image("../assets/TestPyramide.svg", width: 100%)
+      ],
+    )
+  ]
+
+  #content-slide([Ein erster Unit-Test])[
+    Beispiel: liegt ein Messwert in der Toleranz?
+    #toolbox.side-by-side(
+      columns: (1fr, 1fr),
+      [
+        *Java (JUnit)* – das kennt ihr
+        #set text(size: 12pt)
+        ```java
+        @Test
+        void wertInnerhalbToleranz() {
+          assertTrue(Toleranz.istInToleranz(3.5, 3.4, 3.6));
+        }
+
+        @Test
+        void wertAusserhalbToleranz() {
+          assertFalse(Toleranz.istInToleranz(3.7, 3.4, 3.6));
+        }
+        ```
+      ],
+      [
+        *Go (`testing`)* – sieht ähnlich aus
+        #set text(size: 12pt)
+        ```go
+        func TestInToleranz(t *testing.T) {
+          assert.True(t, IstInToleranz(3.5, 3.4, 3.6))
+          assert.False(t, IstInToleranz(3.7, 3.4, 3.6))
+        }
+        ```
+      ],
+    )
+
+    #v(0.5em)
+    #align(center)[
+      #text(size: 0.85em, style: "italic")[
+        Gleiche Idee: Eingabe → erwartetes Ergebnis prüfen.
+      ]
+    ]
+  ]
+
+  // ===========================================================================
+  #section-slide([Von Tests zur gemeinsamen Sprache])[ ]
+
+  #content-slide([Die Folgen reiner Code-Tests])[
     #set align(horizon + center)
     #set text(size: 22pt)
 
@@ -287,6 +415,7 @@
     )
   ]
 
+  // ===========================================================================
   #section-slide([Hands-On])[
     #set image(height: 4cm)
     #set figure(numbering: none)
@@ -348,7 +477,7 @@
 
         Ich hab eine Messvorlage "Stent-Typ-A" mit einem Durchmesser von 3.5mm ± 0.1mm.
 
-        Wenn beim ich den Durchmesser 3.7mm messe dann ist das Teil außerhalb
+        Wenn ich den Durchmesser mit 3.7mm messe, dann ist das Teil außerhalb
         der Toleranz und somit nicht maßhaltig.
 
         #v(1em)
@@ -444,7 +573,34 @@
     )
   ]
 
-  #content-slide([Exkurs: Verhalten in Go Test abbilden])[
+  // ===========================================================================
+  #section-slide([Vom Test-Code zu Steps])[ ]
+
+  #content-slide([Ein klassischer Test – in Java])[
+    #show raw: set text(size: 12pt)
+    Den selben Fall als gewöhnlicher JUnit-Test (das kennt ihr):
+    ```java
+    @Test
+    void messwertAusserhalbToleranz() {
+      // Given
+      var app = setupApp();
+      var templateId = TemplateId.of("MV123");
+      app.createTemplate(new CreateTemplate(templateId,
+          List.of(new Dimension("Durchmesser", "mm", 3.5, 3.4, 3.6))));
+      var measurementId = app.startMeasurement(new StartMeasurement(templateId));
+
+      // When
+      app.observeValue(new MeasureValue(measurementId, "Durchmesser", 3.7));
+
+      // Then
+      var status = app.getMeasurementStatus(measurementId);
+      assertTrue(status.isFinished());
+      assertFalse(status.isDimensionallyAccurate());
+    }
+    ```
+  ]
+
+  #content-slide([Derselbe Test – in Go])[
     #show raw: set text(size: 12pt)
     #toolbox.side-by-side(
       [
@@ -462,7 +618,8 @@
           })
 
           measurementID, _ := app.StartMeasurement(ctx,
-            app.StartMeasurement{TemplateID: templateID})pin2
+            app.StartMeasurement{TemplateID: templateID})
+                                                        pin2
         ```
       ],
       [
@@ -477,7 +634,8 @@
             app.GetMeasurementStatus{MeasurementID: measurementID})
 
           assert.True(t, status.IsFinished)
-          assert.False(t, status.IsDimensionallyAccurate)pin6
+          assert.False(t, status.IsDimensionallyAccurate)
+                                                        pin6
         }
         ```
       ],
@@ -494,6 +652,7 @@
   ]
 
   #content-slide([Refactored: Funktionen extrahiert])[
+    Gleiche Idee in Java wie in Go – hier in Go:
     ```go
     func TestMeasurementOutOfTolerance(t *testing.T) {
       // Given
@@ -555,7 +714,10 @@
     )
   ]
 
-  #content-slide([Implementierung mit Godog: Steps definieren])[
+  // ===========================================================================
+  #section-slide([BDD-Frameworks: Cucumber (Java) & Godog (Go)])[ ]
+
+  #content-slide([Godog (Go): Steps definieren])[
     Jeder Gherkin-Step wird via Regex einer Suite-Methode zugeordnet
     #toolbox.side-by-side(
       columns: (1fr, auto),
@@ -583,11 +745,11 @@
     )
   ]
 
-  #content-slide([Implementierung mit Godog: Steps definieren])[
+  #content-slide([Godog (Go): Signatur der Steps])[
 
-    - Capture Groups des Patterns enstprichen Parametern
+    - Capture Groups des Patterns entsprechen Parametern
     - Optional: erstes Argument `context.Context`
-    - Optional: letztes Argument `*gogog.Table` oder `*gogog.DocString`
+    - Optional: letztes Argument `*godog.Table` oder `*godog.DocString`
     - Optional: `context.Context` als return value, wird für die nächsten Steps genutzt
     - Optional: `error` als return value -> Step schlägt fehl
 
@@ -607,32 +769,100 @@
     )
   ]
 
-  #content-slide([Test Suite ausführen])[
-    #toolbox.side-by-side(
-      columns: (1fr, auto),
-      [
-        #set text(size: 14pt)
+  #content-slide([Cucumber-JVM (Java): Steps definieren])[
+    Das Pattern steht als *Annotation direkt an der Methode* \
+    (Annotationen aus `io.cucumber.java.de.*`):
+    #show raw: set text(size: 11pt)
+    ```java
+    public class MessungSteps {
+      private final SzenarioState state;   // von PicoContainer injiziert
+      public MessungSteps(SzenarioState state) { this.state = state; }
+      @Angenommen("Messvorlage {string} mit Dimensionen existiert:")
+      public void messvorlageExistiert(String name, DataTable tabelle) {
+        var dimensionen = tabelle.asList(Dimension.class);
+        state.app.createTemplate(new CreateTemplate(TemplateId.of(name), dimensionen));
+      }
+      @Wenn("der Wert {double} für {string} erfasst wird")
+      public void wertErfasstWird(double wert, String dimension) {
+        state.app.observeValue(new MeasureValue(state.measurementId, dimension, wert));
+      }
+      @Dann("ist das Teil nicht maßhaltig")
+      public void teilNichtMasshaltig() {
+        assertFalse(state.app.getMeasurementStatus(state.measurementId)
+            .isDimensionallyAccurate());
+      }
+    }
+    ```
+  ]
 
+  #content-slide([Cucumber-JVM (Java): die Bausteine])[
+    - Step-Pattern als *Annotation* `@Angenommen` / `@Wenn` / `@Dann` \
+      (lokalisiert über `io.cucumber.java.de.*`)
+    - Parameter via *Cucumber Expressions* `{string}`, `{int}`, `{double}` – oder Regex
+    - Tabellen als `io.cucumber.datatable.DataTable`, \
+      mehrzeiliger Text als `io.cucumber.docstring.DocString`
+    - Geteilter State zwischen Steps via *Dependency Injection* \
+      (z.B. PicoContainer): der `SzenarioState` wird in den Konstruktor injiziert
+  ]
+
+  #content-slide([Test ausführen: Go & Java])[
+    #show raw: set text(size: 12pt)
+    #toolbox.side-by-side(
+      columns: (1fr, 1fr),
+      [
+        *Go – `godog.TestSuite`*
         ```go
         func TestFeatures(t *testing.T) {
           suite := godog.TestSuite{
-            ScenarioInitializer: pin1InitializeScenariopin2,
+            ScenarioInitializer: InitializeScenario,
             Options: &godog.Options{
               Format:   "pretty",
               Paths:    []string{"features"},
               TestingT: t,
             },
           }
-
           if suite.Run() != 0 {
             t.Fatal("non-zero status returned")
           }
         }
         ```
-
-        #pinit-highlight(1, 2, fill: blue.transparentize(80%))
       ],
-      [ #image("../assets/godog.png", height: 5cm) ],
+      [
+        *Java – JUnit 5 Platform Suite*
+        ```java
+        @Suite
+        @IncludeEngines("cucumber")
+        @SelectClasspathResource("features")
+        @ConfigurationParameter(
+            key = GLUE_PROPERTY_NAME,
+            value = "messdatenerfassung")
+        public class RunCucumberTest { }
+        ```
+
+        #v(0.5em)
+        #text(size: 1.1em)[Läuft mit `mvn test` / `gradle test`.]
+      ],
+    )
+  ]
+
+  #content-slide([Vergleich: Cucumber-JVM ↔ Godog])[
+    #set text(size: 13pt)
+    #table(
+      columns: (auto, 1fr, 1fr),
+      inset: 6pt,
+      align: left + horizon,
+      stroke: 0.5pt + meko_grey,
+      table.header(
+        [*Aspekt*], [*Cucumber-JVM (Java)*], [*Godog (Go)*],
+      ),
+      [Feature-Files], [`src/test/resources/**.feature`], [`features/*.feature`],
+      [Step-Bindung], [Annotation `@Angenommen` an der Methode], [Registrierung `sc.Given(regex, fn)`],
+      [Parameter], [Cucumber Expressions `{string}` / Regex], [Regex Capture Groups],
+      [Geteilter State], [DI (PicoContainer): Konstruktor], [`context.Context` durchgereicht],
+      [Tabellen], [`DataTable`], [`*godog.Table`],
+      [Mehrzeiliger Text], [`DocString`], [`*godog.DocString`],
+      [Runner], [`@Suite` + `@IncludeEngines("cucumber")`], [`godog.TestSuite{}.Run()`],
+      [Sprache (de)], [`io.cucumber.java.de.*`], [`# language: de`],
     )
   ]
 
@@ -647,6 +877,7 @@
     ))
   ]
 
+  // ===========================================================================
   #section-slide([Gherkin Highlights])[]
 
   #content-slide([Background])[
@@ -742,6 +973,10 @@
           | B         |      42mm |
           | C         |   1337deg |
         ```
+        #v(0.5em)
+        #text(size: 0.8em, style: "italic")[
+          Java: `io.cucumber.datatable.DataTable`
+        ]
       ],
     )
   ]
@@ -774,11 +1009,16 @@
           // Compare
         },
         ```
+        #v(0.5em)
+        #text(size: 0.8em, style: "italic")[
+          Java: `io.cucumber.docstring.DocString`
+        ]
       ],
     )
   ]
 
-  #section-slide[Tools die wir nutzen][ ]
+  // ===========================================================================
+  #section-slide[Go-Tooling rund um Godog][ ]
 
   #content-slide[Ghokin][
     #toolbox.side-by-side(
@@ -800,7 +1040,7 @@
             }
             """
           ```
-        ],
+        ]
       ],
     )
 
@@ -830,22 +1070,23 @@
           var rows []Row
           err := godotils.UnmarshalTable(table, &rows)
           ```
-        ],
+        ]
       ],
     )
 
   ]
 
   #content-slide[Godogen][
+    *Erinnert ihr euch an Javas `@Given` an der Methode?* \
+    Godogen bringt diese Ergonomie nach Go.
     #toolbox.side-by-side(
       [
-        *Step Patterns als directive an der Funktion* \
+        *Step-Pattern als Direktive an der Funktion* \
         #link("https://github.com/lukasngl/godogen")
-        - Inklusive Linter
-        - `InitializeSteps` wird via code-gen erstellt
-        - #strike()[Kann (noch) keine Methoden Steps] _Ab v0.3.0 verfügbar!_
-          - State #strike()[muss] kann mittels `context.Context` durchgeschleift werden
-
+        - Plain godog: Pattern steht *getrennt* in der Registrierung
+        - Godogen: Pattern steht *am* Step – wie Javas Annotation
+        - `InitializeSteps` wird via code-gen erstellt, inkl. Linter
+        - State via `context.Context` (Methoden-Steps ab v0.3.0)
       ],
       [
         #align(center)[
@@ -855,27 +1096,14 @@
             s.available -= num
           }
           ```
-        ],
+        ]
       ],
     )
 
   ]
 
+  // ===========================================================================
   #section-slide([Fazit])[
-  ]
-
-  #content-slide([Warum überhaupt testen?])[
-    - Ein Softwarefehler in Medizinprodukten kann Leben gefährden
-    - Regulatorische Anforderungen (MDR, FDA)
-      - Softwarevalidierung verpflichtend
-
-    #v(1em)
-    #align(center)[
-      #text(size: 0.9em, style: "italic")[
-        Tests verhindern nicht nur Produktionsausfälle, \
-        sondern schützen am Ende auch Menschenleben.
-      ]
-    ]
   ]
 
   #content-slide([BDD + Klassisches Testen = 💚])[
@@ -903,7 +1131,15 @@
       ],
     )
 
-    #v(1.5em)
+    #v(1em)
+
+    #align(center)[
+      #text(size: 0.9em, style: "italic")[
+        Unit-Tests bilden das Fundament, BDD-Szenarien die gemeinsame Sprache obendrauf.
+      ]
+    ]
+
+    #v(0.5em)
 
     #align(center)[
       #text(size: 0.95em, style: "italic", fill: green.darken(20%))[
@@ -922,7 +1158,7 @@
     ]
 
     #link(
-      "https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation/releases/download/latest/handout.pdf",
+      "https://github.com/MeKo-Christian/gherkin-presentation/releases/download/latest/handout.pdf",
     )[
       #image("../assets/DownTheSlide.png", height: 50%)
     ]
@@ -931,13 +1167,14 @@
 
     #text(size: 1.5em)[
       #link(
-        "https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation/releases/download/latest/handout.pdf",
+        "https://github.com/MeKo-Christian/gherkin-presentation/releases/download/latest/handout.pdf",
       )[
         → Slides herunterladen
       ]
     ]
   ]
 
+  // ===========================================================================
   #section-slide([Appendix])[
     #align(horizon + center)[
       #text(size: 1.2em)[
@@ -964,7 +1201,7 @@
     - Testmethoden als lesbare Sätze
     - Namenskonvention: Methoden beginnen mit "should"
     - Paradigmenwechsel: Von "Tests" zu "Verhalten" (Behaviour)
-    - Entwicklung von JBehave als JUnit-Ersatz
+    - Entwicklung von JBehave als JUnit-Ersatz (in Java!)
 
     #v(0.5em)
 
@@ -976,10 +1213,6 @@
         Requirements sind fundamentally about behavior
       ]
     ]
-
-    #place(bottom + left, dx: 0%, dy: 6%, text(size: 11pt)[
-      Quelle: #link("https://dannorth.net/blog/introducing-bdd/")[Dan North - Introducing BDD]
-    ])
 
   ]
 
@@ -1022,137 +1255,6 @@
     )
   ]
 
-  #slide[
-    #text(size: 9pt)[
-      Bei Palm führten sie 2006 eine Studie durch, die zeigte: Wird ein Bug 3 Wochen später behoben, kostet die Behebung desselben Bugs das 24-fache an Aufwand.
-      #text(style: "italic")[
-        (Quelle: Jeff Sutherland)
-      ]
-    ]
-
-    #image("../assets/DownShift.gif", width: 85%)
-
-    #place(
-      right,
-      dy: -1em,
-      text(size: 10pt, style: "italic")[
-        Bildquelle:
-        #link(
-          "https://www.linkedin.com/posts/davidavpereira_fixing-production-bugs-is-640x-more-expensive-activity-7286021036976857089-UHmI/",
-        )[David Pereira]
-      ],
-    )
-  ]
-
-  #slide[
-    #image("../assets/TestPyramide.svg", width: 80%)
-  ]
-
-  #content-slide([Alternative: Ginkgo])[
-    #set text(size: 16pt)
-
-    *Ein weiteres BDD-Framework für Go*
-
-    #v(1em)
-
-    *Was ist Ginkgo?*
-    - BDD Testing Framework für Go
-    - Fokus auf ausdrucksstarke, lesbare Tests
-    - Arbeitet mit Gomega Matcher-Library zusammen
-
-    #v(1em)
-
-    *Key Features:*
-    - Verschachtelte Test-Organisation mit `Describe`, `Context`, `When`
-    - Parallelisierung & Randomisierung von Tests
-    - Umfangreiche Setup/Teardown-Möglichkeiten
-    - Flexibel: Unit-, Integration- & Performance-Tests
-
-    #v(1.5em)
-
-    #text(size: 11pt)[
-      Quelle: #link("https://github.com/onsi/ginkgo")[github.com/onsi/ginkgo]
-    ]
-  ]
-
-  #content-slide([Ginkgo vs. Godog])[
-    #set text(size: 16pt)
-
-    *Beispiel: Ginkgo-Syntax*
-    ```go
-    Describe("Checking books out", func() {
-        When("the library has the book", func() {
-            It("lends it to the reader", func() {
-                // Test logic
-            })
-        })
-    })
-    ```
-
-    #v(1em)
-
-    *Der Unterschied:*
-
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      align(left)[
-        *Ginkgo*
-        - Code-basiertes BDD
-        - Tests in Go geschrieben
-        - Strukturiert & lesbar
-        - Für Developer
-      ],
-      align(left)[
-        *Godog*
-        - Cucumber-Style
-        - Natural Language (Gherkin)
-        - Feature-Files
-        - Für alle Stakeholder
-      ],
-    )
-  ]
-
-  #content-slide([Warum Ginkgo keine gute Wahl ist])[
-    #set text(size: 14pt)
-
-    #v(1em)
-
-    #grid(
-      columns: (60%, 40%),
-      column-gutter: 2em,
-      [
-        - *Gomega Matcher-Probleme*
-          - Eigene DSL für Assertions (nicht Standard-Go)
-          - Steile Lernkurve für neue Teammitglieder
-          - Fehler sind oft schwer zu verstehen
-          - Beispiel: `Expect(result).To(BeNumerically(">=", 42))`
-
-        #v(0.5em)
-
-        - *Nur für Entwickler lesbar*
-          - Code bleibt Code – keine natürliche Sprache
-          - Stakeholder können Tests nicht lesen oder reviewen
-          - Keine direkte Dokumentation für nicht-technische Personen
-
-        #v(0.5em)
-
-        - *Kein echter BDD-Workflow*
-          - Keine Trennung zwischen Spezifikation und Implementierung
-          - Tests sind immer noch eng an Code gekoppelt
-          - Kollaboration mit Business bleibt schwierig
-      ],
-      align(horizon + center)[
-        #text(size: 14pt, style: "italic", fill: orange.darken(20%))[
-          Ginkgo verbessert die Teststruktur, \
-          löst aber nicht das \
-          Kommunikationsproblem \
-          zwischen Teams
-        ]
-      ],
-    )
-  ]
-
   #content-slide([Herausforderungen von BDD/Cucumber])[
     #set text(size: 15pt)
 
@@ -1187,59 +1289,6 @@
     - *Skalierungsprobleme*
       - Hunderte von Features schwer zu überblicken
       - Redundanz und Inkonsistenzen können zunehmen
-  ]
-
-  #content-slide([Ausblick: Modellbasierter Ansatz])[
-    #set text(size: 15pt)
-
-    *Ein vielversprechender Forschungsansatz*
-
-    #v(1em)
-
-    Statt manuell geschriebener Szenarien werden *formale Modelle* zur Grundlage verwendet:
-
-    #v(1em)
-
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 1.5em,
-      align(left)[
-        *Vorteile:*
-        - Automatische Testgenerierung
-        - Impact-Analysen
-        - Regression Test Selection
-        - Qualitätsbewertungen
-      ],
-      align(left)[
-        *Möglichkeiten:*
-        - Effizientere Zusammenarbeit
-        - Tiefe Einblicke in Risiken
-        - KI-Integration in BDD
-        - Systematische Coverage
-      ],
-    )
-
-    #v(1.5em)
-
-    #align(center)[
-      #text(size: 14pt, style: "italic", fill: blue.darken(20%))[
-        Der modellbasierte Ansatz ist aktuell noch Forschungsthema, \
-        zeigt aber vielversprechende Potenziale für die Zukunft von BDD
-      ]
-    ]
-
-    #place(
-      bottom + right,
-      dx: -1em,
-      dy: -1em,
-      text(size: 11pt)[
-        #link(
-          "https://www.meetup.com/de-DE/ict-improve/events/310953461/?eventOrigin=group_similar_events",
-        )[
-          → "Gherkin is dead, long live BDD?", 21.10. in Eindhoven
-        ]
-      ],
-    )
   ]
 
 ]
