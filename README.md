@@ -1,4 +1,4 @@
-# Fehler früh finden: Von Unit-Tests zu BDD mit Gurken
+# Fehler früh finden: Von Unit-Tests zu BDD
 
 <img src="./assets/pickle-gopher.png" alt="Pickle Gopher" height="200px">
 
