@@ -14,13 +14,13 @@
       Fehler früh finden
     ],
     subtitle: [
-      Von Unit-Tests zu BDD mit Gurken
+      Von Unit-Tests zu BDD (mit Gurken ;-)
     ],
     authors: [
       Christian Budde #link("https://github.com/MeKo-Christian")[#fa-github() MeKo-Christian] \
     ],
     extra: [
-      Informatik für Ingenieure · Software-Testen
+      Vortrag für Studenten der Ingenieursinformatik
     ],
   )
 
@@ -344,7 +344,18 @@
 
   #section-slide([Und warum die Gurken?])[
     #align(horizon + center)[
-      #text(size: 0.9em)[
+    ]
+
+    // Floating GopherGherkin
+    #place(top + right, dx: -10%, dy: 36%, image(
+      "../assets/GopherGherkin.png",
+      height: 6em,
+    ))
+  ]
+
+  #content-slide([Und warum die Gurken?])[
+    #align(horizon + center)[
+      #text(size: 1.5em)[
         Cucumber ist ein BDD-Framework
       ]
 
@@ -362,12 +373,6 @@
         -- #link("https://cucumber.io/")[cucumber.io]
       ]
     ]
-
-    // Floating GopherGherkin
-    #place(top + right, dx: 0%, dy: 18%, image(
-      "../assets/GopherGherkin.png",
-      height: 6em,
-    ))
   ]
 
   #content-slide([Key Features])[
