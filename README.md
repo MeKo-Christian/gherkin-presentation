@@ -2,17 +2,13 @@
 
 <img src="./assets/pickle-gopher.png" alt="Pickle Gopher" height="200px">
 
-A German-language presentation about software testing — starting from *why* we test and *which options* we have (with a strong focus on catching failures early), then going into detail on Behavior-Driven Development (BDD) and Gherkin. Examples are shown in both **Java** (JUnit, Cucumber-JVM) and **Go** (`testing`, Godog).
+A German-language presentation about software testing — starting from _why_ we test and _which options_ we have (with a strong focus on catching failures early), then going into detail on Behavior-Driven Development (BDD) and Gherkin. Examples are shown in both **Java** (JUnit, Cucumber-JVM) and **Go** (`testing`, Godog).
 
 **Author:** Christian Budde ([@MeKo-Christian](https://github.com/MeKo-Christian))
 
-## Audience
-
-This deck targets **second-year "Informatik für Ingenieure" students**: they all know **Java**, but only **little Go**. Because Go is the language we use at MeKo, the examples lead with the familiar Java and then map onto Go, with an overall **emphasis on Go**.
-
 ## Origin
 
-This is a fundamental rewrite of the talk *"Wenn Gurken-Code plötzlich Spaß macht!"*, originally presented by Christian Budde & Lukas Nagel ([@lukasngl](https://github.com/lukasngl)) at **Hannover Gophers** on October 14, 2025. The original (Go-only meetup) slides live at [lukasngl/2025-10-14-gopher-meetup-cucumber-presentation](https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation).
+This is a fundamental rewrite of the talk _"Wenn Gurken-Code plötzlich Spaß macht!"_, originally presented by Christian Budde & Lukas Nagel ([@lukasngl](https://github.com/lukasngl)) at **Hannover Gophers** on October 14, 2025. The original (Go-only meetup) slides live at [lukasngl/2025-10-14-gopher-meetup-cucumber-presentation](https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation).
 
 ## Download the Slides
 
@@ -22,7 +18,7 @@ This is a fundamental rewrite of the talk *"Wenn Gurken-Code plötzlich Spaß ma
 
 ## Overview
 
-The talk builds up from testing fundamentals to BDD as a way of turning specifications into living documentation that serves as tests *and* as communication for everyone involved. The running example is MeKo's medical-device measurement domain (Messvorlage, Toleranz, Maßhaltigkeit).
+The talk builds up from testing fundamentals to BDD as a way of turning specifications into living documentation that serves as tests _and_ as communication for everyone involved. The running example is MeKo's medical-device measurement domain (Messvorlage, Toleranz, Maßhaltigkeit).
 
 ## Key Topics
 
@@ -79,15 +75,15 @@ The same classic Given/When/Then test, first in **Java/JUnit** (the students' ho
 
 A direct comparison of the two frameworks:
 
-| Aspect | Cucumber-JVM (Java) | Godog (Go) |
-|---|---|---|
-| Step binding | Annotation `@Angenommen/@Wenn/@Dann` **on the method** | Registration `sc.Given/When/Then(regex, fn)` |
-| Step parameters | Cucumber Expressions `{int}`/`{string}`/`{double}` or regex | Regex capture groups |
-| Shared state | DI (PicoContainer): constructor injection | `context.Context` passed through |
-| Tables | `io.cucumber.datatable.DataTable` | `*godog.Table` |
-| Multi-line text | `io.cucumber.docstring.DocString` | `*godog.DocString` |
-| Runner | JUnit 5 `@Suite` + `@IncludeEngines("cucumber")` | `godog.TestSuite{}.Run()` |
-| German (de) | `io.cucumber.java.de.*` annotations | `# language: de` comment |
+| Aspect          | Cucumber-JVM (Java)                                         | Godog (Go)                                   |
+| --------------- | ----------------------------------------------------------- | -------------------------------------------- |
+| Step binding    | Annotation `@Angenommen/@Wenn/@Dann` **on the method**      | Registration `sc.Given/When/Then(regex, fn)` |
+| Step parameters | Cucumber Expressions `{int}`/`{string}`/`{double}` or regex | Regex capture groups                         |
+| Shared state    | DI (PicoContainer): constructor injection                   | `context.Context` passed through             |
+| Tables          | `io.cucumber.datatable.DataTable`                           | `*godog.Table`                               |
+| Multi-line text | `io.cucumber.docstring.DocString`                           | `*godog.DocString`                           |
+| Runner          | JUnit 5 `@Suite` + `@IncludeEngines("cucumber")`            | `godog.TestSuite{}.Run()`                    |
+| German (de)     | `io.cucumber.java.de.*` annotations                         | `# language: de` comment                     |
 
 ### 7. Gherkin highlights
 
