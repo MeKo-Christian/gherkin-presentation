@@ -1,42 +1,47 @@
-# Wenn Gurken-Code plötzlich Spaß macht!
+# Fehler früh finden: Von Unit-Tests zu BDD mit Gurken
 
 <img src="./assets/pickle-gopher.png" alt="Pickle Gopher" height="200px">
 
-A presentation about Behavior-Driven Development (BDD) and Cucumber testing in Go, presented at Hannover Gophers on October 14, 2025.
+A German-language presentation about software testing — starting from *why* we test and *which options* we have (with a strong focus on catching failures early), then going into detail on Behavior-Driven Development (BDD) and Gherkin. Examples are shown in both **Java** (JUnit, Cucumber-JVM) and **Go** (`testing`, Godog).
 
-**Authors:** Christian Budde ([@cwbudde](https://github.com/cwbudde)) & Lukas Nagel ([@lukasngl](https://github.com/lukasngl))
+**Author:** Christian Budde ([@MeKo-Christian](https://github.com/MeKo-Christian))
+
+## Audience
+
+This deck targets **second-year "Informatik für Ingenieure" students**: they all know **Java**, but only **little Go**. Because Go is the language we use at MeKo, the examples lead with the familiar Java and then map onto Go, with an overall **emphasis on Go**.
+
+## Origin
+
+This is a fundamental rewrite of the talk *"Wenn Gurken-Code plötzlich Spaß macht!"*, originally presented by Christian Budde & Lukas Nagel ([@lukasngl](https://github.com/lukasngl)) at **Hannover Gophers** on October 14, 2025. The original (Go-only meetup) slides live at [lukasngl/2025-10-14-gopher-meetup-cucumber-presentation](https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation).
 
 ## Download the Slides
 
-<a href="https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation/releases/download/latest/handout.pdf"><img src="./assets/DownTheSlide.png" alt="Download Slides" height="200px"></a>
+<a href="https://github.com/MeKo-Christian/gherkin-presentation/releases/download/latest/handout.pdf"><img src="./assets/DownTheSlide.png" alt="Download Slides" height="200px"></a>
 
-[Download the slides (PDF)](https://github.com/lukasngl/2025-10-14-gopher-meetup-cucumber-presentation/releases/download/latest/handout.pdf)
+[Download the slides (PDF)](https://github.com/MeKo-Christian/gherkin-presentation/releases/download/latest/handout.pdf)
 
 ## Overview
 
-This presentation introduces Behavior-Driven Development (BDD) using Cucumber/Godog for Go developers. It demonstrates how BDD can transform software specifications into living documentation that serves as both tests and communication tools for all stakeholders.
+The talk builds up from testing fundamentals to BDD as a way of turning specifications into living documentation that serves as tests *and* as communication for everyone involved. The running example is MeKo's medical-device measurement domain (Messvorlage, Toleranz, Maßhaltigkeit).
 
 ## Key Topics
 
-### The Problem
+### 1. Why test at all?
 
 - Specifications scattered across Jira, Confluence, and chat tools
-- Complex code without clear documentation
-- Specifications and code drifting apart over time
-- Stakeholders unable to verify requirements
+- Complex code without clear documentation; specs and code drifting apart
+- Software errors in medical devices can endanger lives; regulatory requirements (MDR, FDA) mandate validation
+- **Catch failures early**: the later a bug is found, the more expensive it gets
 
-### The Solution: BDD with Cucumber
+### 2. Which options do we have?
 
-**Single Source of Truth:**
+- Manual vs. automated testing — what automated tests buy us (regression safety, fast feedback)
+- **The Test Pyramid**: unit / integration / end-to-end, and what each level catches
+- A first concrete **unit test side by side in Java (JUnit) and Go (`testing`)** on a small tolerance check
 
-- Specification = Tests = Documentation
-- Always up-to-date documentation
-- Focus on business logic, not implementation
-- Accessible to all team members, even without programming knowledge
+### 3. From tests to a common language (BDD)
 
-### The Recipe Principle
-
-BDD follows a simple pattern:
+Code-only tests are read only by developers, and specs/code/docs drift apart. BDD follows a simple, recipe-like pattern:
 
 ```gherkin
 Angenommen (Given) - Initial state
@@ -44,13 +49,11 @@ Wenn (When) - Action taken
 Dann (Then) - Expected result
 ```
 
-Just like a recipe describes ingredients, steps, and expected outcome!
+This creates a single source of truth — **Specification = Tests = Documentation**:
 
-### Common Language for Everyone
-
-**For Developers:** Clear, stable specification
-**For QA:** Automated, verifiable validation
-**For Stakeholders:** Human-readable requirements
+- **For Developers:** Clear, stable specification
+- **For QA:** Automated, verifiable validation
+- **For Stakeholders:** Human-readable requirements
 
 Example:
 
@@ -62,68 +65,65 @@ Szenario: Stent-Dimension validieren
   Dann ist das Produkt in Ordnung
 ```
 
-## Key Features of Cucumber
+### 4. Hands-On: from behavior to specification
 
-- **Living Documentation**: Specifications are automatically tested
-- **Natural Language**: Supports 80+ languages via Gherkin syntax
-- **Stakeholder Integration**: Involves business stakeholders in the development process
+1. **Stakeholder Requirements** → user stories and acceptance criteria
+2. **Gherkin Specification** → feature files in plain language
+3. **Implementation** → step definitions connecting Gherkin to code
+
+### 5. From test code to steps
+
+The same classic Given/When/Then test, first in **Java/JUnit** (the students' home turf), then the **Go** equivalent — and how steps are extracted into reusable functions.
+
+### 6. BDD frameworks: Cucumber (Java) vs. Godog (Go)
+
+A direct comparison of the two frameworks:
+
+| Aspect | Cucumber-JVM (Java) | Godog (Go) |
+|---|---|---|
+| Step binding | Annotation `@Angenommen/@Wenn/@Dann` **on the method** | Registration `sc.Given/When/Then(regex, fn)` |
+| Step parameters | Cucumber Expressions `{int}`/`{string}`/`{double}` or regex | Regex capture groups |
+| Shared state | DI (PicoContainer): constructor injection | `context.Context` passed through |
+| Tables | `io.cucumber.datatable.DataTable` | `*godog.Table` |
+| Multi-line text | `io.cucumber.docstring.DocString` | `*godog.DocString` |
+| Runner | JUnit 5 `@Suite` + `@IncludeEngines("cucumber")` | `godog.TestSuite{}.Run()` |
+| German (de) | `io.cucumber.java.de.*` annotations | `# language: de` comment |
+
+### 7. Gherkin highlights
+
+- **Background**: shared setup steps for multiple scenarios
+- **Scenario Outline**: parameterized tests with examples
+- **Tables**: structured data input
+- **DocStrings**: multi-line text input
+
+### 8. Go tooling around Godog
+
+- **godog**: Cucumber test framework for Go
+- **ghokin**: formatter for Gherkin files
+- **godotils**: table utilities for Godog
+- **godogen**: colocate the step pattern with its implementation via a `//godog:step` directive — bringing Java's `@Given`-on-the-method ergonomics to Go
+
+## Why BDD + classical testing = 💚
+
+BDD and classical testing complement each other rather than compete:
+
+**Before coding:** a clear, shared definition; expectations readable by everyone; early detection of misunderstandings.
+
+**After coding:** automatic verification; easy validation; living documentation.
 
 <img src="./assets/GopherHappy.png" alt="Gopher Happy" height="200px">
 
-## Hands-On: From Stakeholder to Implementation
-
-The presentation demonstrates the complete workflow:
-
-1. **Stakeholder Requirements** → User stories and acceptance criteria
-2. **Gherkin Specification** → Feature files in plain language
-3. **Godog Implementation** → Step definitions connecting Gherkin to Go code
-
-### Gherkin Features Covered
-
-- **Background**: Shared setup steps for multiple scenarios
-- **Scenario Outline**: Parameterized tests with examples
-- **Tables**: Structured data input
-- **DocStrings**: Multi-line text input
-
-## Tools
-
-- **godog**: Cucumber test framework for Go
-- **ghokin**: Formatter for Gherkin files in Go
-- **godogen**: Colocate step patterns with implementation
-- **godotils**: Table utilities for Godog
-
-## Why BDD + Classical Testing = 💚
-
-BDD and classical testing complement each other:
-
-**Before Coding:**
-
-- Clear, shared definition
-- Expectations readable by everyone
-- Early detection of misunderstandings
-
-**After Coding:**
-
-- Automatic verification
-- Easy validation
-- Living documentation
-
-## Critical for Medical Devices
-
-- Software errors in medical devices can endanger lives
-- Regulatory requirements (MDR, FDA) mandate software validation
-- Tests not only prevent production failures but also protect human lives
-
-## Challenges Addressed
-
-- High effort in creating and maintaining scenarios
-- Limited expressiveness for complex logic
-- Scaling issues with hundreds of features
-- Need for stakeholder buy-in
-
 ## Appendix Topics
 
-- The history of BDD (Dan North, 2003-2004)
+- The history of BDD (Dan North, 2003–2004; JBehave as a JUnit successor)
 - Etymology of "Cucumber" and "Gherkin"
-- Alternative: Ginkgo framework
-- Model-based testing approaches
+- Challenges of BDD/Cucumber (effort to create and maintain scenarios, limited expressiveness for complex logic, scaling, stakeholder buy-in)
+
+## Building
+
+The slides are written in [Typst](https://typst.app/) with [Polylux](https://polylux.dev/). Common commands (see the `justfile`):
+
+```sh
+just build   # build presentation.pdf, handout.pdf, and pdfpc notes
+just watch   # live preview while editing
+```
